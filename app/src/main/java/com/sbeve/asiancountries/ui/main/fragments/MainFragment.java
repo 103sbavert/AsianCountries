@@ -55,7 +55,7 @@ public class MainFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        if (sharedPreferences.getBoolean(IS_DATA_DOWNLOADED_KEY, false)) {
+        if (!sharedPreferences.getBoolean(IS_DATA_DOWNLOADED_KEY, false)) {
             mainViewModel.downloadDataAndInsertIntoDb();
         }
 
@@ -80,7 +80,6 @@ public class MainFragment extends Fragment {
         mainViewModel.getAllCountries().observe(getViewLifecycleOwner(), listOfCountries ->
                 recyclerViewAdapter.setDataSet(listOfCountries)
         );
-
     }
 
     @Override
