@@ -1,5 +1,7 @@
 package com.sbeve.asiancountries.ui.main.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.sbeve.asiancountries.R;
 import com.sbeve.asiancountries.databinding.FragmentMainBinding;
-import com.sbeve.asiancountries.ui.main.MainActivity;
 import com.sbeve.asiancountries.ui.main.recyclerview.RecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -24,15 +25,15 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-import static com.sbeve.asiancountries.ui.main.MainActivity.IS_DATA_DOWNLOADED_KEY;
+import static com.sbeve.asiancountries.utils.Constants.IS_DATA_DOWNLOADED_KEY;
 
 public class MainFragment extends Fragment {
 
-    FragmentMainBinding binding;
-    MainViewModel mainViewModel;
-    MainActivity mainActivity;
-    RecyclerViewAdapter recyclerViewAdapter;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private FragmentMainBinding binding;
+    private MainViewModel mainViewModel;
+    private RecyclerViewAdapter recyclerViewAdapter;
+    private SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -45,16 +46,16 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mainActivity = (MainActivity) requireActivity();
-        MainViewModelFactory viewModelFactory = new MainViewModelFactory(mainActivity);
-        mainViewModel = new ViewModelProvider(mainActivity, viewModelFactory).get(MainViewModel.class);
+        MainViewModelFactory viewModelFactory = new MainViewModelFactory(requireContext());
+        mainViewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
+        sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE);
         recyclerViewAdapter = new RecyclerViewAdapter(new ArrayList<>());
 
         binding.recyclerview.setAdapter(recyclerViewAdapter);
 
         setHasOptionsMenu(true);
 
-        if (!mainActivity.sharedPreferences.getBoolean(IS_DATA_DOWNLOADED_KEY, false)) {
+        if (sharedPreferences.getBoolean(IS_DATA_DOWNLOADED_KEY, false)) {
             mainViewModel.downloadDataAndInsertIntoDb();
         }
 
@@ -70,8 +71,7 @@ public class MainFragment extends Fragment {
 
         mainViewModel.getDownloadAttemptResult().observe(
                 getViewLifecycleOwner(),
-                downloadAttemptResult -> mainActivity
-                        .sharedPreferences
+                downloadAttemptResult -> sharedPreferences
                         .edit()
                         .putBoolean(IS_DATA_DOWNLOADED_KEY, downloadAttemptResult.wasDownloadSuccessful)
                         .apply()
@@ -93,8 +93,8 @@ public class MainFragment extends Fragment {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe()
             );
-            mainActivity.sharedPreferences.edit().putBoolean(IS_DATA_DOWNLOADED_KEY, false).apply();
-            Toast.makeText(mainActivity, "The data will be downloaded again when the activity is restarted", Toast.LENGTH_SHORT).show();
+            sharedPreferences.edit().putBoolean(IS_DATA_DOWNLOADED_KEY, false).apply();
+            Toast.makeText(requireContext(), "The data will be downloaded again when the activity is restarted", Toast.LENGTH_SHORT).show();
         }
         return true;
     }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.sbeve.asiancountries.data.MainRepository;
 import com.sbeve.asiancountries.model.Country;
+import com.sbeve.asiancountries.utils.Injection;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class MainViewModel extends ViewModel {
     private final MainRepository mainRepository;
 
     public MainViewModel(Context context) {
-        this.mainRepository = new MainRepository(context);
+        this.mainRepository = Injection.provideRepository(context);
     }
 
     public LiveData<Completable> getCompletable() {

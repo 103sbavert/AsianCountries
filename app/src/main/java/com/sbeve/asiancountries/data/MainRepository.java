@@ -1,12 +1,9 @@
 package com.sbeve.asiancountries.data;
 
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.sbeve.asiancountries.data.retrofit.RetrofitInit;
-import com.sbeve.asiancountries.data.room.CountriesDatabase;
+import com.sbeve.asiancountries.data.retrofit.RetrofitInit.AccessApi;
 import com.sbeve.asiancountries.data.room.CountriesDatabaseDao;
 import com.sbeve.asiancountries.model.Country;
 
@@ -22,11 +19,13 @@ import retrofit2.Response;
 public class MainRepository {
 
     private final CountriesDatabaseDao dao;
-    private final RetrofitInit.AccessApi accessApi = RetrofitInit.accessApi;
+    private final AccessApi accessApi;
     private final MutableLiveData<DownloadAttemptResult> _downloadAttemptResult = new MutableLiveData<>();
     private final MutableLiveData<Completable> _completable = new MutableLiveData<>();
-    public MainRepository(Context context) {
-        dao = CountriesDatabase.getCountriesDatabaseInstance(context).getDao();
+
+    public MainRepository(CountriesDatabaseDao dao, AccessApi accessApi) {
+        this.dao = dao;
+        this.accessApi = accessApi;
     }
 
     public LiveData<Completable> getCompletable() {

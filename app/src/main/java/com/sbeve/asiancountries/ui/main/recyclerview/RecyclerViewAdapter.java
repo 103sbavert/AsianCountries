@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 
-import com.sbeve.asiancountries.databinding.RecyclerViewItemLayoutBinding;
+import com.sbeve.asiancountries.databinding.CountryItemLayoutBinding;
 import com.sbeve.asiancountries.model.Country;
 import com.sbeve.asiancountries.utils.Converters;
 import com.sbeve.asiancountries.utils.Utils;
@@ -43,15 +43,15 @@ public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.RVViewHolde
     }
 
     public static class RVViewHolder extends RecyclerView.ViewHolder {
-        public RecyclerViewItemLayoutBinding binding;
+        public CountryItemLayoutBinding binding;
 
-        RVViewHolder(@NonNull RecyclerViewItemLayoutBinding binding) {
+        RVViewHolder(@NonNull CountryItemLayoutBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
         public static RVViewHolder getViewHolder(ViewGroup parent) {
-            RecyclerViewItemLayoutBinding binding = RecyclerViewItemLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            CountryItemLayoutBinding binding = CountryItemLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
             return new RVViewHolder(binding);
         }
 
