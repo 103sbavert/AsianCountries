@@ -20,6 +20,7 @@ import com.sbeve.asiancountries.ui.main.recyclerview.RecyclerViewAdapter;
 import java.util.ArrayList;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -51,7 +52,8 @@ public class MainFragment extends Fragment {
 
         binding.recyclerview.setAdapter(recyclerViewAdapter);
 
-        //downloading data from the rest api if it's not already downloaded
+        setHasOptionsMenu(true);
+
         if (!mainActivity.sharedPreferences.getBoolean(IS_DATA_DOWNLOADED_KEY, false)) {
             mainViewModel.downloadDataAndInsertIntoDb();
         }
@@ -66,7 +68,6 @@ public class MainFragment extends Fragment {
                 )
         );
 
-        //observing the results of the api request, updating the shared preference according to the response
         mainViewModel.getDownloadAttemptResult().observe(
                 getViewLifecycleOwner(),
                 downloadAttemptResult -> mainActivity
@@ -76,10 +77,9 @@ public class MainFragment extends Fragment {
                         .apply()
         );
 
-        //updating the recyclerview with a new data set when it's successfully downloaded
-        mainViewModel.getAllCountries().observe(getViewLifecycleOwner(), listOfCountries -> {
-            recyclerViewAdapter.setDataSet(listOfCountries);
-        });
+        mainViewModel.getAllCountries().observe(getViewLifecycleOwner(), listOfCountries ->
+                recyclerViewAdapter.setDataSet(listOfCountries)
+        );
 
     }
 
@@ -87,7 +87,13 @@ public class MainFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
         if (item.getItemId() == R.id.delete_all) {
-            mainViewModel.clearDb();
+            Completable completable = mainViewModel.clearDb();
+            compositeDisposable.add(completable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
+            );
+            mainActivity.sharedPreferences.edit().putBoolean(IS_DATA_DOWNLOADED_KEY, false).apply();
             Toast.makeText(mainActivity, "The data will be downloaded again when the activity is restarted", Toast.LENGTH_SHORT).show();
         }
         return true;

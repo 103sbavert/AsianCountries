@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.sbeve.asiancountries.data.repository.MainRepository;
+import com.sbeve.asiancountries.data.MainRepository;
 import com.sbeve.asiancountries.model.Country;
 
 import java.util.List;
@@ -32,8 +32,8 @@ public class MainViewModel extends ViewModel {
         return mainRepository.getAllCountries();
     }
 
-    public void clearDb() {
-        mainRepository.clearDb();
+    public Completable clearDb() {
+        return mainRepository.clearDb();
     }
 
     public void downloadDataAndInsertIntoDb() {

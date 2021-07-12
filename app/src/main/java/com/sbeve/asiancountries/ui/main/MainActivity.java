@@ -3,7 +3,6 @@ package com.sbeve.asiancountries.ui.main;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,18 +41,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.app_bar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case R.id.delete_all: {
-                countriesDatabaseDao.deleteAll();
-                sharedPreferences.edit().putBoolean(IS_DATA_DOWNLOADED_KEY, false).apply();
-            }
-        }
         return true;
     }
 }

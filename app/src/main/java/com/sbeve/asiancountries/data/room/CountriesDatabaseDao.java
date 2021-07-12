@@ -21,5 +21,5 @@ public interface CountriesDatabaseDao {
     Completable insertCountries(List<Country> countries);
 
     @Query("DELETE FROM countries")
-    void deleteAll();
+    Completable deleteAll();
 }

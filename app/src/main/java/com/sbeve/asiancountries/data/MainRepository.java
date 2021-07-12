@@ -1,4 +1,4 @@
-package com.sbeve.asiancountries.data.repository;
+package com.sbeve.asiancountries.data;
 
 import android.content.Context;
 
@@ -41,8 +41,8 @@ public class MainRepository {
         return dao.getAllCountries();
     }
 
-    public void clearDb() {
-        dao.deleteAll();
+    public Completable clearDb() {
+        return dao.deleteAll();
     }
 
     public void downloadDataAndInsertIntoDb() {

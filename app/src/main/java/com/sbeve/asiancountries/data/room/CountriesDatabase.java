@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.sbeve.asiancountries.model.Country;
+import com.sbeve.asiancountries.utils.Converters;
 
 @Database(entities = Country.class, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)

@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import com.sbeve.asiancountries.databinding.RecyclerViewItemLayoutBinding;
 import com.sbeve.asiancountries.model.Country;
+import com.sbeve.asiancountries.utils.Converters;
+import com.sbeve.asiancountries.utils.Utils;
 
 import java.util.List;
 
@@ -59,34 +61,9 @@ public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.RVViewHolde
             binding.regionTextview.setText("Region: " + currentItem.region);
             binding.subregionTextview.setText("Region: " + currentItem.subregion);
             binding.populationTextview.setText("Population: " + currentItem.population);
-            binding.bordersTextview.setText("Borders: " + getBorders(currentItem.borders));
-            binding.languagesTextview.setText("Languages: " + getLanguages(currentItem.languages));
-        }
-
-        public String getBorders(List<String> bordersList) {
-            StringBuilder output = new StringBuilder();
-
-            for (int i = 0; i < bordersList.size(); i += 1) {
-                output.append(bordersList.get(i));
-                if (i < bordersList.size() - 1) {
-                    output.append(", ");
-                }
-            }
-
-            return output.toString();
-        }
-
-        public String getLanguages(List<Country.Language> languagesList) {
-            StringBuilder output = new StringBuilder();
-
-            for (int i = 0; i < languagesList.size(); i += 1) {
-                output.append(languagesList.get(i).name);
-                if (i < languagesList.size() - 1) {
-                    output.append(", ");
-                }
-            }
-
-            return output.toString();
+            binding.bordersTextview.setText("Borders: " + Converters.fromStringListToString(currentItem.borders));
+            binding.languagesTextview.setText("Languages: " + Converters.fromLanguageListToString(currentItem.languages));
+            Utils.fetchSvg(binding.getRoot().getContext(), currentItem.flag, binding.flagImageview);
         }
     }
 }

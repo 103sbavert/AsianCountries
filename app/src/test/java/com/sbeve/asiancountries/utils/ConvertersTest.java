@@ -1,4 +1,4 @@
-package com.sbeve.asiancountries.data.room;
+package com.sbeve.asiancountries.utils;
 
 import com.sbeve.asiancountries.model.Country.Language;
 
