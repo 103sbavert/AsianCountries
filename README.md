@@ -21,7 +21,7 @@ This app shows a list of all Asian countries using a REST API. It is built entir
 * Use of LiveData
 
 ## Known issues (or possible improvements I could make if I had more time)
-* Use OkHTTP entirely instead of Retrofit (to reduce redundancy)
+* Integrate OkHTTP with Retrofit (to reduce redundancy)
 * Integrate RxJava with the Retrofit API instead of a Callback object
 * Improve the way the app loads SVGs using the Sharp library
 * Use RxJava Flowables instead of LiveData
